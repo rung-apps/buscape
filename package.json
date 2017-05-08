@@ -1,0 +1,21 @@
+{
+  "name": "buscape",
+  "version": "1.0.0",
+  "description": "Rung demo integration to tell when product is cheaper by Buscapé",
+  "main": "index.js",
+  "repository": "https://github.com/rung-tools/rung-buscape-ext.git",
+  "author": "Vitor Emanuel Batista <vitorebatista@gmail.com>",
+  "license": "MIT",
+  "category": "retail",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "ramda": "^0.23.0",
+    "rung-sdk": "^1.0.7",
+    "superagent": "^3.5.0",
+    "superagent-promise": "^1.1.0"
+  },
+  "rung": {
+    "title": "Menores preços no Buscapé",
+    "preview": "Philco 20 polegadas LED no preço mínimo de R$ 547.99"
+  }
+}
