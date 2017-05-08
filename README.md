@@ -2,9 +2,9 @@
 
 Vitor Emanuel Batista &lt;vitorebatista@gmail.com&gt;
 
-[![Deploy to Rung](https://i.imgur.com/uijt57R.png)](https://app.rung.com.br/deploy)
+[![Deploy to Rung](https://i.imgur.com/uijt57R.png)](https://app.rung.com.br/integrations/buscape/customize)
 
-![rung-cli 0.2.6](https://img.shields.io/badge/rung--cli-0.2.6-blue.svg?style=flat-square)
+![rung-cli 0.2.7](https://img.shields.io/badge/rung--cli-0.2.7-blue.svg?style=flat-square)
 ![buscape 1.0.0](https://img.shields.io/badge/buscape-1.0.0-green.svg?style=flat-square)
 
 Rung demo integration to tell when product is cheaper by Buscapé
@@ -25,4 +25,3 @@ Rung demo integration to tell when product is cheaper by Buscapé
 - `rung-sdk`: `^1.0.7`
 - `superagent`: `^3.5.0`
 - `superagent-promise`: `^1.1.0`
-
