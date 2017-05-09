@@ -2,9 +2,9 @@
 
 Vitor Emanuel Batista &lt;vitorebatista@gmail.com&gt;
 
-[![Deploy to Rung](https://i.imgur.com/uijt57R.png)](https://app.rung.com.br/integrations/buscape/customize)
+[![Deploy to Rung](https://i.imgur.com/uijt57R.png)](https://app.rung.com.br/integration/buscape/customize)
 
-![rung-cli 0.2.7](https://img.shields.io/badge/rung--cli-0.2.7-blue.svg?style=flat-square)
+![rung-cli 0.2.8](https://img.shields.io/badge/rung--cli-0.2.8-blue.svg?style=flat-square)
 ![buscape 1.0.0](https://img.shields.io/badge/buscape-1.0.0-green.svg?style=flat-square)
 
 Rung demo integration to tell when product is cheaper by Buscapé
