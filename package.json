@@ -1,10 +1,10 @@
 {
   "name": "buscape",
-  "version": "1.0.0",
-  "description": "Rung demo integration to tell when product is cheaper by Buscapé",
+  "version": "1.0.5",
+  "description": "Find the lowest prices for the product you want, integrating directly with Buscapé",
   "main": "index.js",
   "repository": "https://github.com/rung-tools/rung-buscape-ext.git",
-  "author": "Vitor Emanuel Batista <vitorebatista@gmail.com>",
+  "author": "Rung <suporte@rung.com.br>",
   "license": "MIT",
   "category": "retail",
   "dependencies": {
@@ -16,6 +16,9 @@
   },
   "rung": {
     "title": "Menores preços no Buscapé",
-    "preview": "Philco 20 polegadas LED no preço mínimo de R$ 547.99"
+    "preview": "<div style=\"font-family:Roboto, sans-serif;text-align:center;font-size:12px\"><div style=\"float:left;margin-right:2px;margin-left:-4px;position:absolute\"><img src=\"http://thumbs.buscape.com.br/tv/philco-ph14e10db-14-polegadas-led-plana_200x200-PU978b5_1.jpg\" height=\"45\" draggable=\"false\" style=\"padding:3px;background-color:white;border:3px solid silver;border-radius:30px;margin-top:20px\"></div><div style=\"float:right;width:89px;margin-top:6px\"><a href=\"http://www.buscape.com.br/prod_unico?idu=620725&amp;mdsrc=9262544&amp;mdapp=9399&amp;mddtn=51922611\" target=\"_blank\" style=\"font-size:13px;display:block;font-weight:bold;text-decoration:none;color:#222222\">Philco 14 polegadas LED</a><div style=\"margin-top:17px;font-weight:bold;color:#222222\">R$ 508.99</div></div></div>"
+  },
+  "devDependencies": {
+    "rung-cli": "^0.4.3"
   }
 }

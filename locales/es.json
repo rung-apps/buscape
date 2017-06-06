@@ -1,0 +1,8 @@
+{
+    "Enter the product you are looking for (Ex: TV)":"El producto que busca (Ej: TV)",
+    "The value of the product must be less than":"El valor del producto debe ser inferior a",
+    "{{productshortname}} to R$ {{pricemin}}":"{{productshortname}} a R$ {{pricemin}}",
+    "Click here to open in Buscapé":"Haga clic aquí para abrir en Buscapé",
+    "Lower prices in Buscapé": "Menores precios en Buscapé",
+    "Find the lowest prices for the product you want, integrating directly with Buscapé": "Encuentre los precios más bajos para el producto que desee, integrando directamente con el Buscapé"
+}
