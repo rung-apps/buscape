@@ -1,15 +1,20 @@
 import { create } from 'rung-sdk';
-import { Money, String as Text } from 'rung-sdk/dist/types';
+import { Double, String as Text } from 'rung-sdk/dist/types';
 import Bluebird from 'bluebird';
 import agent from 'superagent';
 import promisifyAgent from 'superagent-promise';
-import { head, map, pipe, prop } from 'ramda';
+import {
+    filter,
+    map,
+    mergeAll,
+    replace
+} from 'ramda';
 
 const request = promisifyAgent(agent, Bluebird);
 
-const token = '6c6f4f354d436e774638733d';
-const sourceId = '22491686';
-const url = `http://sandbox.buscape.com.br/service/findProductList/lomadee/${token}/BR/?sourceId=${sourceId}&app-token=${token}&format=json&program=lomadee`;
+const token = '----------MY-TOKEN----------';
+const sourceId = '----------MY-SOURCE-ID----------';
+const url = `https://sandbox-api.lomadee.com/v2/${token}/product/_search?sourceId=${sourceId}`;
 
 const styles = {
     container: {
@@ -42,44 +47,53 @@ const styles = {
     }
 };
 
-function createAlert({ productshortname, productname, pricemin, links, thumbnail }) {
-    const { url } = head(links).link;
-    const { url: picture } = thumbnail;
+function render(picture, product, price) {
+    return (
+        <div style={ styles.container }>
+            <div style={ styles.imageContainer }>
+                <img src={ picture } height={ 45 } draggable={ false } style={ styles.thumbnail } />
+            </div>
+            <div style={ styles.contentContainer }>
+                { product }
+                <div style={ styles.price }>R$ { price }</div>
+            </div>
+        </div>
+    );
+}
+
+function createAlert({ id, shortname, name, priceMin, thumbnail }) {
+    const product = shortname || name;
+    const thumbnailUrl = replace('http://', 'https://', thumbnail.url);
 
     return {
-        title: _('{{productshortname}} to R$ {{pricemin}}', { productshortname, pricemin }),
-        content: (
-            <div style={ styles.container }>
-                <div style={ styles.imageContainer }>
-                    <img src={ picture } height={ 45 } draggable={ false } style={ styles.thumbnail } />
-                </div>
-                <div style={ styles.contentContainer }>
-                    { productshortname }
-                    <div style={ styles.price }>R$ { pricemin }</div>
-                </div>
-            </div>
-        ),
-        comment: `
-            ### ${productname}
+        [id]: {
+            title: _('{{product}} to R$ {{priceMin}}', { product, priceMin }),
+            content: render(thumbnailUrl, product, priceMin),
+            comment: `
+                ### ${name}
 
-            **R$ ${pricemin}**
+                **R$ ${priceMin}**
 
-            [${_('Click here to open in Buscapé')}](${url})
+            `,
+            resources: [thumbnailUrl]
+        }
 
-            ![${productname}](${picture})
-        `
     };
 }
 
 function main(context, done) {
-    const { item: keyword, value: priceMax } = context.params;
+    const { item, value } = context.params;
 
     return request.get(url)
-        .query({ keyword, priceMax })
+        .query({ keyword: item, sort: 'price' })
         .then(({ body }) => {
-            const products = body.product || [];
-            const alerts = map(pipe(prop('product'), createAlert), products);
-            done({ alerts });
+            const products = filter(
+                item => item.priceMax < value,
+                body.products
+            ) || [];
+            done({ alerts: mergeAll(
+                map(createAlert, products)
+            ) });
         })
         .catch(() => done({ alerts: {} }));
 }
@@ -92,9 +106,19 @@ const params = {
     },
     value: {
         description: _('The value of the product must be less than'),
-        type: Money,
-        default: 500
+        type: Double,
+        default: 500.00
     }
 };
 
-export default create(main, { params });
+export default create(main, {
+    params,
+    primaryKey: true,
+    title: _('Lower prices in Buscapé'),
+    description: _('Find the lowest prices for the product you want, integrating directly with Buscapé'),
+    preview: render(
+        'https://thumbs.buscape.com.br/tv/philco-ph16d10d-16-polegadas-led-plana_200x200-PU9760f_1.jpg',
+        'Philco 16" LED',
+        '499.90'
+    )
+});

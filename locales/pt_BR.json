@@ -1,8 +1,8 @@
 {
-    "Enter the product you are looking for (Ex: TV)":"Informe o produto que você está procurando (Ex: TV)",
-    "The value of the product must be less than":"O valor do produto deve ser inferior a",
-    "{{productshortname}} to R$ {{pricemin}}":"{{productshortname}} a R$ {{pricemin}}",
-    "Click here to open in Buscapé":"Clique aqui para abrir no Buscapé",
+    "Enter the product you are looking for (Ex: TV)": "Informe o produto que você está procurando (Ex: TV)",
+    "The value of the product must be less than": "O valor do produto deve ser inferior a",
+    "{{product}} to R$ {{pricemin}}": "{{product}} a R$ {{pricemin}}",
+    "Click here to open in Buscapé": "Clique aqui para abrir no Buscapé",
     "Lower prices in Buscapé": "Menores preços no Buscapé",
     "Find the lowest prices for the product you want, integrating directly with Buscapé": "Encontre os menores preços para o produto que desejar, integrando diretamente com o Buscapé"
 }
