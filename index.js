@@ -1,6 +1,6 @@
 import { create } from 'rung-sdk';
-import { Double, String as Text } from 'rung-sdk/dist/types';
-import Bluebird from 'bluebird';
+import { AutoComplete, Double } from 'rung-cli/dist/types';
+import Bluebird, { reject } from 'bluebird';
 import agent from 'superagent';
 import promisifyAgent from 'superagent-promise';
 import {
@@ -14,7 +14,7 @@ const request = promisifyAgent(agent, Bluebird);
 
 const token = '----------MY-TOKEN----------';
 const sourceId = '----------MY-SOURCE-ID----------';
-const url = `https://sandbox-api.lomadee.com/v2/${token}/product/_search?sourceId=${sourceId}`;
+const productionUrl = `https://api.lomadee.com/v2/${productionToken}/product/_search`;
 
 const styles = {
     container: {
@@ -61,19 +61,21 @@ function render(picture, product, price) {
     );
 }
 
-function createAlert({ id, shortname, name, priceMin, thumbnail }) {
+function createAlert({ id, shortname, name, priceMin, /* link, */ thumbnail }) {
     const product = shortname || name;
     const thumbnailUrl = replace('http://', 'https://', thumbnail.url);
+    const productUrl = `http://www.buscape.com.br/${name.replace(/ /g, '-')}`;
 
     return {
         [id]: {
             title: _('{{product}} to R$ {{priceMin}}', { product, priceMin }),
             content: render(thumbnailUrl, product, priceMin),
             comment: `
-                ### ${name}
+            ### ${name}
 
-                **R$ ${priceMin}**
+            **R$ ${priceMin}**
 
+            [${_('Click here to open in Buscapé')}](${productUrl})
             `,
             resources: [thumbnailUrl]
         }
@@ -81,27 +83,29 @@ function createAlert({ id, shortname, name, priceMin, thumbnail }) {
     };
 }
 
-function main(context, done) {
-    const { item, value } = context.params;
+function main(context) {
+    const { item: keyword, value } = context.params;
+    const query = { sourceId, keyword, sort: 'price', size: 24 };
+    const getProducts = products => filter(
+        item => item.priceMax < value && item.hasOffer > 0,
+        products || []
+    );
 
-    return request.get(url)
-        .query({ keyword: item, sort: 'price' })
+    return request
+        .get(productionUrl)
+        .query(query)
         .then(({ body }) => {
-            const products = filter(
-                item => item.priceMax < value,
-                body.products
-            ) || [];
-            done({ alerts: mergeAll(
-                map(createAlert, products)
-            ) });
+            return body.requestInfo.status === 'OK'
+                ? { alerts: mergeAll(map(createAlert, getProducts(body.products))) }
+                : reject(new Error(_('Product not found')));
         })
-        .catch(() => done({ alerts: {} }));
+        .catch(() => reject(new Error(_('Product not found'))));
 }
 
 const params = {
     item: {
         description: _('Enter the product you are looking for (Ex: TV)'),
-        type: Text,
+        type: AutoComplete,
         default: 'TV'
     },
     value: {
@@ -115,7 +119,7 @@ export default create(main, {
     params,
     primaryKey: true,
     title: _('Lower prices in Buscapé'),
-    description: _('Find the lowest prices for the product you want, integrating directly with Buscapé'),
+    description: _('Compare the price of one or more products across multiple sites and find the ideal opportunity to acquire them.'),
     preview: render(
         'https://thumbs.buscape.com.br/tv/philco-ph16d10d-16-polegadas-led-plana_200x200-PU9760f_1.jpg',
         'Philco 16" LED',
